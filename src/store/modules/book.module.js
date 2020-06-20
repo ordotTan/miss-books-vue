@@ -19,6 +19,7 @@ export default {
         },
         booksToShow(state) {
             var books = state.books;
+            if (books.length === 0) return []
             var filter = state.bookFilterBy;
             if (!filter) return books;
             var booksToShow = [...books];
@@ -42,17 +43,17 @@ export default {
         setBooks(state, { books }) {
             state.books = books;
         },
-        removeBook(state, {id}) {
+        removeBook(state, { id }) {
             var idx = state.books.findIndex(book => book._id === id);
             if (idx === -1) throw new Error('Somthing went wrong while deleting book');
-            state.books.splice(idx,1);
+            state.books.splice(idx, 1);
         },
-        saveBook(state, {book}) {
+        saveBook(state, { book }) {
             var idx = state.books.findIndex(currBook => currBook._id === book._id);
             if (idx === -1) state.books.push(book);
             else state.books.splice(idx, 1, book);
         },
-        setBook(state, {book}) {
+        setBook(state, { book }) {
             state.currBook = book;
         },
         setBookFilter(state, filterBy) {
@@ -65,32 +66,32 @@ export default {
             context.commit({ type: 'setBooks', books });
             return books;
         },
-        async removeBook({commit}, {id}) {
+        async removeBook({ commit }, { id }) {
             await bookService.remove(id);
-            commit({type: 'removeBook', id});
+            commit({ type: 'removeBook', id });
         },
-        async saveBook({commit}, {book}) {
+        async saveBook({ commit }, { book }) {
             // const foundBook = await bookService.get(book._id)
             // if (foundBook && foundBook._id) return false
             // if (fromGoogle) delete book._id
             const savedBook = await bookService.save(book);
-            commit({type: 'saveBook', book: savedBook});
+            commit({ type: 'saveBook', book: savedBook });
             return savedBook
         },
-        async getBookById({commit}, {id}) {
+        async getBookById({ commit }, { id }) {
             const book = await bookService.get(id);
-            commit({type: 'setBook', book});
+            commit({ type: 'setBook', book });
             return book;
         },
-        async addReview({commit}, {id,review}) {
-            const updatedBook = await bookService.addReview(id,review);
-            commit({type: 'saveBook', book: updatedBook});
-            commit({type: 'setBook',  book: updatedBook});
+        async addReview({ commit }, { id, review }) {
+            const updatedBook = await bookService.addReview(id, review);
+            commit({ type: 'saveBook', book: updatedBook });
+            commit({ type: 'setBook', book: updatedBook });
         },
-        async removeReview({commit}, {reviewId,bookId}) {
-            const updatedBook = await bookService.removeReview(reviewId,bookId);
-            commit({type: 'saveBook', book: updatedBook});
-            commit({type: 'setBook',  book: updatedBook});
+        async removeReview({ commit }, { reviewId, bookId }) {
+            const updatedBook = await bookService.removeReview(reviewId, bookId);
+            commit({ type: 'saveBook', book: updatedBook });
+            commit({ type: 'setBook', book: updatedBook });
         }
     },
 }
