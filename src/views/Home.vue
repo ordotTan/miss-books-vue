@@ -1,7 +1,7 @@
 <template>
   <div class="home flex justify-center align-iterm">
     <img src="../assets/books.jpg"/>
-    <h1>Wlecome to "Miss Books"</h1>
+    <h1>Welcome to "Miss Books"</h1>
   </div>
 </template>
 
